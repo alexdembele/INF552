@@ -26,9 +26,12 @@ function CreateMap()
     var path = d3.geoPath().projection(projection);
 
     // Ajout de la carte au conteneur SVG
-    var svg = d3.select("#main").append("svg")
+    var svg = d3.select("#main")
+    .style("fill","rgb(211, 211, 211)")
+    .append("svg")
     .attr("width", ctx.width)
-    .attr("height", ctx.height);
+    .attr("height", ctx.height)
+    .attr("transform","translate(-80,10)")
 
     
     d3.json("data/country-110m.json").then(function (world) {
@@ -57,7 +60,9 @@ function LoadData()
 };
 
 function ColorMap(data)
+
 {
+    ctx.data=data
     let sdgColorScale = d3.scaleLinear()
     .domain([0, 50, 100]) // Les points de référence pour les couleurs
     .range(["red", "white", "green"]) // Les couleurs correspondantes
@@ -65,7 +70,7 @@ function ColorMap(data)
     let paysIndex={}
     
     data.forEach(element => {
-        if(element.year==2000)
+        if(element.year==ctx.date)
         {
             paysIndex[element.country]={sdg_index:element.sdg_index_score}
         }
@@ -86,5 +91,42 @@ function ColorMap(data)
         }
     }
          )
-
+    CreateStats(data)
 };
+
+
+function CreateStats(data)
+{
+    let rec = d3.select("#stats").append("svg").attr("width", 800)
+    .attr("height", 540)
+    .attr("transform","translate(800,-540)")
+
+    rec.append("rect")
+    .attr('width', 800)
+    .attr('height', 540)
+    .attr('fill', 'lime')
+    .style('opacity',0.1)
+
+   rec.append("text")
+   .text("Yousk2")
+   .attr("y",20)
+   .text("Statistiques")  
+    .style("font-size", "24px")  
+    .style("font-weight", "bold");  
+}
+
+    
+
+
+function changeDate()
+{
+
+let annee = parseInt(d3.select("#year-picker-input").property("value"))
+if (annee>=2000 && annee<=2022)
+{
+    ctx.date=annee
+    ColorMap(ctx.data)
+
+}
+console.log(annee)
+}
