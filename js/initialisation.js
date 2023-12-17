@@ -12,6 +12,7 @@ function createViz() {
     CreateMap();
     CreateStats();
     LoadData();
+    CreateComparaison();
 
 
 
