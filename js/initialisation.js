@@ -8,7 +8,9 @@ const ctx = {
 function createViz() {
     console.log("Using D3 v" + d3.version);
     
+
     CreateMap();
+    CreateStats();
     LoadData();
 
 
@@ -91,7 +93,7 @@ function ColorMap(data)
         }
     }
          )
-    CreateStats(data)
+    updateStats(data)
 };
 
 
@@ -108,14 +110,23 @@ function CreateStats(data)
     .style('opacity',0.1)
 
    rec.append("text")
-   .text("Yousk2")
    .attr("y",20)
    .text("Statistiques")  
     .style("font-size", "24px")  
     .style("font-weight", "bold");  
+
+    debug()
 }
 
+
+
+
+function updateStats(data)
+{
     
+
+   
+}
 
 
 function changeDate()
