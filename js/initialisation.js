@@ -1,7 +1,8 @@
 const ctx = { 
     width: 960,
     height:540,
-    date:2000
+    date:2000,
+    statCountry:"France"
 
 };
 
@@ -46,6 +47,8 @@ function CreateMap()
     //gestion souris
     .on("click", function (event,d) {
         console.log("Pays cliqué :", d.properties.name)
+        ctx.statCountry = d.properties.name
+        updateStats(ctx.data)
     })
     .on("mouseover", function (d) {
         d3.select(this).style("opacity", 0.5);
@@ -100,21 +103,35 @@ function ColorMap(data)
 
 function CreateStats(data)
 {
-    let rec = d3.select("#stats").append("svg").attr("width", 800)
+    //Svg de la partie statistique
+    let rec= d3.select("#stats").append("svg")
+    .attr("width", 800)
     .attr("height", 540)
     .attr("transform","translate(800,-540)")
-
+    
+    // FOnd de la partie statistique
     rec.append("rect")
     .attr('width', 800)
     .attr('height', 540)
     .attr('fill', 'lime')
     .style('opacity',0.1)
 
+    //Titre de la partie statistique
    rec.append("text")
    .attr("y",20)
    .text("Statistiques")  
     .style("font-size", "24px")  
-    .style("font-weight", "bold");  
+    .style("font-weight", "bold"); 
+    
+    //Nom du pays dont on va montrer les stats
+    rec.append("text")
+    .attr("x",150)
+    .attr("y",20)
+    .attr("id","countryName")
+    .text(ctx.statCountry)  
+     .style("font-size", "18px")  
+     .style("font-weight", "bold")
+     .style("fill","blue")
 
     debug()
 }
@@ -124,7 +141,10 @@ function CreateStats(data)
 
 function updateStats(data)
 {
-    
+    let svg = d3.select("#stats svg")
+
+    // On moddifie le nom du pays étudié
+    d3.select("#countryName").text(ctx.statCountry)
 
    
 }
