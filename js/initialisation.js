@@ -14,6 +14,7 @@ function createViz() {
     CreateStats();
     LoadData();
     CreateComparaison();
+    
 
 
 
@@ -58,17 +59,21 @@ function CreateMap()
         
     });
 });
+
 };
 
 function LoadData()
 {
-    d3.csv("data/sdg_index_2000-2022.csv").then(function (data) {ColorMap(data)}).catch(function (err) { console.log(err); });
+    d3.csv("data/sdg_index_2000-2022.csv").then(function (data) {
+        ctx.data=data;
+        
+        ColorMap(data)}).catch(function (err) { console.log(err); });
 };
 
 function ColorMap(data)
 
 {
-    ctx.data=data
+    
     let sdgColorScale = d3.scaleLinear()
     .domain([0, 50, 100]) // Les points de référence pour les couleurs
     .range(["red", "white", "green"]) // Les couleurs correspondantes
