@@ -32,9 +32,9 @@ function CreateComparaison()
 }
 function CreateSelecteur(data)
 {
-    let compare=d3.select("#compare").append("g").attr("transform","translate(0,-1000")
-    let selecteur1 = compare.append('select').attr("transform","translate(0,-540").attr("id","countrySelector1")
-    let selecteur2 = compare.append("select").attr("transform","translate(100,-540").attr("id","countrySelector2")
+    let compare=d3.select("#compare").append("g").attr("transform","translate(0,1000")
+    let selecteur1 = compare.append('select').attr("y",0).attr("id","countrySelector1")
+    let selecteur2 = compare.append("select").attr("y",0).attr("id","countrySelector2")
 
     let countries=data.map(d => d.country);
     //selecteur1 = d3.select("#countrySelect1");
@@ -77,6 +77,11 @@ cty.selecteur2.on("change", function () {
     cty.paysDroite= d3.select(this).property("value");
     updateComparaison()   });
 
+
+function GraphMultiLigne(data)
+{
+    
+}
 function updateComparaison()
 {
     console.log(cty.paysGauche,cty.paysDroite)
