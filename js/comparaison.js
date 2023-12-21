@@ -43,6 +43,7 @@ function CreateSelecteur(data) {
     .append("select")
     .attr("y", 0)
     .attr("id", "countrySelector1");
+
   let selecteur2 = compare
     .append("select")
     .attr("y", 0)

@@ -1,36 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>INF552 - 2023 - Projet</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
-        <script type="text/javascript" src="js/d3.v7.min.js"></script>
-        <script src="https://unpkg.com/topojson@3"></script>
-        <script type="text/javascript" src="js/statistiques.js"></script>
-        <script type="text/javascript" src="js/comparaison.js"></script>
-        <script type="text/javascript" src="js/initialisation.js"></script>
 
-    </head>
-    <body onload="createViz()"> 
-        <div id="header">
-            
-        </div>
-        
+<head>
+    <meta charset="utf-8">
+    <title>INF552 - 2023 - Projet</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+    <script type="text/javascript" src="js/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script type="text/javascript" src="js/statistiques.js"></script>
+    <script type="text/javascript" src="js/comparaison.js"></script>
+    <script type="text/javascript" src="js/initialisation.js"></script>
 
-        <div id="main">
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
 
-        </div>
-        <div id="stats">
-            
+    #header,
+    #main,
+    #stats,
+    #compare,
+    #footer {
+        margin-bottom: 20px;
+        /* Adjust the margin as needed */
+    }
 
-        </div>
-        <div id="compare">
-           
-        </div>
-        <div id="footer">
+    #compare {
+        margin-top: -550px;
+        /* Adjust the margin-top to move it more above */
+    }
+</style>
 
-        </div>
+<body onload="createViz()">
+    <div id="header">
 
-    </body>
+    </div>
+
+
+    <div id="main">
+
+    </div>
+    <div id="stats">
+
+
+    </div>
+    <div id="compare">
+
+    </div>
+    <div id="footer">
+
+    </div>
+
+</body>
 
 </html>
