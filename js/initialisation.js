@@ -55,15 +55,17 @@ function CreateHeader()
     .attr("y",67)
     .attr("x",100)
     .attr("fill","black")
-    .on("mouseover", function (d) {
+    .on("mouseover", function (event,d) {
         d3.select(this).style("opacity", 0.5);
+        
+
         d3.select("#pictoSDG").style("opacity",1)
         
     })
-    .on("mouseout", function (d) {
+    .on("mouseout", function (event,d) {
         d3.select(this).style("opacity",1)
         d3.select("#pictoSDG").style("opacity",0)
-        
+       
         
     })
 
@@ -80,6 +82,52 @@ function CreateHeader()
     .attr("id","labelGliderAnnee")
     .attr("for","year-picker-input")
     .text("Choisissez une année : 2000 ")
+
+    svg.append("rect")
+    .attr("id","change")
+    .attr("height",26)
+    .attr("width",122)
+    .attr("y",64)
+    .attr("x",198)
+    .attr("fill","#d3d3d3")
+    .on("mouseover", function (event,d) {
+        d3.selectAll("#change").style("opacity", 0.5);
+        
+
+        
+        
+    })
+    .on("mouseout", function (event,d) {
+        d3.selectAll("#change").style("opacity",1)
+        
+       
+        
+    })
+    .on("click", function (event,d) {
+        window.location.href="http://localhost:9999/multiligne.html"
+    })
+    
+
+    svg.append("text").text("GrapheMultiligne").attr("id","change").attr("y",80).attr("x",200)
+    .on("mouseover", function (event,d) {
+        d3.selectAll("#change").style("opacity", 0.5);
+        
+
+        
+        
+    })
+    .on("mouseout", function (event,d) {
+        d3.selectAll("#change").style("opacity",1)
+        
+       
+        
+    })
+    .on("click", function (event,d) {
+        window.location.href="http://localhost:9999/multiligne.html"
+    })
+
+   
+    
     
 }
 
