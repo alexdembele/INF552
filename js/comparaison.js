@@ -85,8 +85,7 @@ function GraphMultiLigne()
     //creation selecteur goal
     let selecteur= d3.select("#compare").append("select")
     .attr("id","multiLigne")
-    .attr("width", 1600)
-    .attr("height", 540)
+    
     .attr("transform","translate(0,-540)")
     let goals = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,"global"]
     
@@ -121,26 +120,28 @@ function GraphMultiLigne()
 cty.selecteur = d3.select("#multiLigne");
 cty.selecteur.on("change", function () { 
         
-        cty.A =d3.select(this).property("value");
-        updateMultiLigne()
+        let A =d3.select(this).property("value");
+        updateMultiLigne(A)
            });
 
 function multiLigne(data)
 {
     let svg = d3.select("#compare").append("svg").attr("width", 1600)
-    .attr("height", 540)
+    .attr("height", 500)
     .attr("transform","translate(0,-540)")
+    .attr("id","svgmulti")
     //scale de répartition sur l'axe x
     let xScale = d3.scaleLinear()
     .domain([2000, 2022])
     .range([50,1550]);
+
     let yScale = d3.scaleLinear()
     .domain([0, 100])
-    .range([10,530]);
+    .range([500,0]);
 
     // créer un array [{pays:Nom , sdg:[] , goal1:[],... goal17:[]}]
     let indice="sdg"
-    let arrayData = []
+    cty.arrayData = []
     let current = "A"
     let i = -1
     data.forEach(element => {
@@ -148,7 +149,7 @@ function multiLigne(data)
         {
             i=i+1
             current=element.country
-            arrayData.push([{"pays":current,"sdg":element.sdg_index_score,"goal1":element.goal_1_score,
+            cty.arrayData.push([{"pays":current,"sdg":element.sdg_index_score,"goal1":element.goal_1_score,
             "goal2":element.goal_2_score,
             "goal3":element.goal_3_score,
             "goal4":element.goal_4_score,
@@ -170,7 +171,7 @@ function multiLigne(data)
         }
         else
         {
-            arrayData[i].push({"pays":current,"sdg":element.sdg_index_score,"goal1":element.goal_1_score,
+            cty.arrayData[i].push({"pays":current,"sdg":element.sdg_index_score,"goal1":element.goal_1_score,
             "goal2":element.goal_2_score,
             "goal3":element.goal_3_score,
             "goal4":element.goal_4_score,
@@ -197,22 +198,67 @@ function multiLigne(data)
     let lineGenerator = d3.line()
     .x(d =>xScale(d["date"]) )
     .y(d=> yScale(d["sdg"]))
-    console.log(arrayData[0][0])
+    console.log(cty.arrayData[0][0])
 
-    svg.selectAll("path")
-    .data(arrayData)
+    let paths=svg.selectAll("path")
+    .data(cty.arrayData)
     .enter()
     .append("path")
+    .attr("id","multipath")
     .attr("fill","none")
     .attr("stroke","gray")
-    .attr("stroke-width", 0.1)
+    .attr("stroke-width", 0.3)
     .attr("d", lineGenerator)
+
+    paths.on("mouseover", function (event,d) {
+        d3.select(this)
+        .attr("stroke-width", 1)
+        .attr("stroke","blue")
+        console.log(d[0]["pays"])
+        
+    })
+    .on("mouseout", function (d) {
+        d3.select(this)
+        .attr("stroke","gray")
+        .attr("stroke-width", 0.3)
+        
+    })
 
 
 }
 function updateMultiLigne(A)
 {
-    console.log(A)
+    let goal="sdg"
+    if(A=="global")
+    {
+        goal="sdg"
+    }
+    else
+    {
+        goal="goal"+A.toString()
+    }
+    console.log(goal)
+    let xScale = d3.scaleLinear()
+    .domain([2000, 2022])
+    .range([50,1550]);
+
+    let yScale = d3.scaleLinear()
+    .domain([0, 100])
+    .range([500,0])
+
+    let lineGenerator = d3.line()
+    .x(d =>xScale(d["date"]) )
+    .y(d=> yScale(d[goal]))
+
+    paths=d3.select("#svgmulti").selectAll("path")
+    .data(cty.arrayData)
+    .attr("d", lineGenerator)
+
+   
+
+   
+
+
 
 }
 function updateComparaison()
