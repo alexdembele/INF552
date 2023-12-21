@@ -20,6 +20,14 @@ function initHeader()
     .attr("y",30)
     .attr("stroke","green")
 
+    svg.append("text")
+    .attr("id","surligne")
+    .text("Pays surligné : France")  
+    .style("font-size", "15px")  
+
+    .attr("y",140)
+    .attr("stroke","blue")
+
     svg.append("rect")
     .attr("id","change")
     .attr("height",26)
@@ -45,7 +53,7 @@ function initHeader()
     })
     
 
-    svg.append("text").text("GrapheMultiligne").attr("id","change").attr("y",80).attr("x",200)
+    svg.append("text").text("Index").attr("id","change").attr("y",80).attr("x",200)
     .on("mouseover", function (event,d) {
         d3.selectAll("#change").style("opacity", 0.5);
         
@@ -74,7 +82,7 @@ function CreateMultiLigne()
     let label = d3.select("#header").append("label")
     .attr("for","multiligne")
     .text("  Choisissez un goal ")
-    .attr("stroke","green")
+    
     let goals = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,"global"]
     
 
@@ -117,6 +125,12 @@ function multiLigne(data)
                .attr("height", 1000)
                .attr("transform","translate(0,0)")
                .attr("id","svgmulti")
+
+               svg.append("rect")
+               .attr("height",1000)
+               .attr("width",1600)
+               .attr("fill","lime")
+               .style("opacity",0.1)
                //scale de répartition sur l'axe x
                cty.xScale = d3.scaleLinear()
                .domain([2000, 2022])
@@ -125,6 +139,36 @@ function multiLigne(data)
                cty.yScale = d3.scaleLinear()
                .domain([0, 100])
                .range([1000,20]);
+
+               //axe abscisse
+               let axeX = d3.axisBottom(cty.xScale)
+               let formatAxeX=d3.format(".0f")
+               axeX.tickFormat(formatAxeX);
+               svg.append("g")
+               .attr("transform", "translate(0, 950)")  // Déplacer l'axe au bas du SVG
+               .call(axeX);
+
+               //axe ordonnée
+               let years=[]
+               for(t=2000;t<=2022;t++)
+               {
+                years.push([{x:t,y:950},{x:t,y:0}])
+               }
+               let generateurOrdonnee =d3.line()
+               .x(d =>cty.xScale(d.x) )  
+               .y(d => d.y);
+
+               let axeY = svg.append("g").selectAll("path")
+               .data(years)
+               .enter()
+               .append("path")
+               .attr("fill","none")
+               .attr("stroke","black")
+               .attr("stroke-width", 0.5)
+               .style("opacity",1)
+               .attr("d", generateurOrdonnee)
+               
+
 
                
 
@@ -206,6 +250,7 @@ function multiLigne(data)
                    .attr("stroke-width", 2)
                    .attr("stroke","blue")
                    cty.pays=d[0]["pays"]
+                   d3.select("#surligne").text("Pays surligné : "+d[0]["pays"])
                })
                .on("mouseout", function (d) {
                    d3.select(this)
@@ -227,14 +272,15 @@ function updateMultiLigne(A)
                {
                    goal="goal"+A.toString()
                }
-               console.log(goal)
+               
+
               
            
                let lineGenerator = d3.line()
                .x(d =>cty.xScale(d["date"]) )
                .y(d=> cty.yScale(d[goal]))
            
-               paths=d3.select("#svgmulti").selectAll("path")
+               paths=d3.select("#svgmulti").selectAll("#multipath")
                .data(cty.arrayData)
                .transition()
                .duration(1000)
