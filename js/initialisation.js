@@ -148,6 +148,51 @@ function CreateMap()
     .attr("height", ctx.height)
     .attr("transform","translate(-80,10)")
 
+    let gradient = svg.append("defs")
+    .append("linearGradient")
+    .attr("id", "gradient")
+    .attr("x1", "0%")   // Début du dégradé à 0% (gauche)
+    .attr("x2", "100%"); // Fin du dégradé à 100% (droite)
+
+    gradient.append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", "green");  // Vert
+
+    gradient.append("stop")
+    .attr("offset", "50%")
+    .attr("stop-color", "white");  // Blanc au milieu
+
+    gradient.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "red");    // Rouge
+
+    svg.append("rect")
+    .attr("width", 90)
+    .attr("height", 160)
+    .attr("x",100)
+    .attr("y",400)
+    .attr("height",20)
+    .style("fill", "url(#gradient)");
+
+    let echelleScale = d3.scaleLinear()
+    .domain([0, 100]) // Les points de référence pour les couleurs
+    .range([0,100]) // Les couleurs correspondantes
+
+    let axeX = d3.axisBottom(echelleScale)
+    axeX.ticks(5);
+    svg.append("g")
+    .attr("transform", "translate(100, 430)")  // Déplacer l'axe au bas du SVG
+    .call(axeX);
+
+    svg.append("text")
+    .text("SDG Global Score")
+    .attr("stroke","black")
+    .style("font-size", "13px")
+    .attr("x",100)
+    .attr("y",380)
+
+
+
     
     d3.json("data/country-110m.json").then(function (world) {
     //Construction carte
