@@ -252,6 +252,8 @@ function updateMultiLigne(A)
 
     paths=d3.select("#svgmulti").selectAll("path")
     .data(cty.arrayData)
+    .transition()
+    .duration(1000)
     .attr("d", lineGenerator)
 
    

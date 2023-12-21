@@ -9,7 +9,7 @@ const ctx = {
 function createViz() {
     console.log("Using D3 v" + d3.version);
     
-
+    CreateHeader();
     CreateMap();
     CreateStats();
     LoadData();
@@ -20,6 +20,68 @@ function createViz() {
 
 
 };
+
+function CreateHeader()
+{
+    let svg=d3.select("#header").append("svg").attr("width",400).attr("heigth",10)
+
+    svg.append("text")
+    .text("SDG index dans le monde")  
+    .style("font-size", "30px")  
+    .style("font-weight", "bold")
+    .attr("y",30)
+    .attr("stroke","green")
+
+    let image = d3.select("#header").append("img").attr("id","pictoSDG")
+        .attr("src","../Image/sdg_banner.jpg")
+        .attr("alt","pictogramme sdg")
+        .attr("width",300)
+        .attr("height",150)
+        .style("opacity",0)
+        .attr("x",1000)
+
+    svg.append("text")
+    .text("Critère SDG : ")
+    .style("font-size", "15px")  
+    .attr("y",80)
+    .attr("stroke","blue")
+    
+    
+
+
+    svg.append("rect")
+    .attr("height",20)
+    .attr("width",20)
+    .attr("y",67)
+    .attr("x",100)
+    .attr("fill","black")
+    .on("mouseover", function (d) {
+        d3.select(this).style("opacity", 0.5);
+        d3.select("#pictoSDG").style("opacity",1)
+        
+    })
+    .on("mouseout", function (d) {
+        d3.select(this).style("opacity",1)
+        d3.select("#pictoSDG").style("opacity",0)
+        
+        
+    })
+
+
+    let slider = d3.select("#header").append('input')
+    .attr("type","range")
+    .attr("id","year-picker-input")
+    .attr("min","2000")
+    .attr("max","2022")
+    .attr("value","2000")
+    .on("input",function(){changeDate()})
+
+    let labelGlider = d3.select("#header").append("label")
+    .attr("id","labelGliderAnnee")
+    .attr("for","year-picker-input")
+    .text("Choisissez une année : 2000 ")
+    
+}
 
 function CreateMap()
 {
@@ -138,7 +200,7 @@ function CreateStats(data)
      .style("font-weight", "bold")
      .style("fill","blue")
 
-    debug()
+    
 }
 
 
@@ -165,5 +227,7 @@ if (annee>=2000 && annee<=2022)
     ColorMap(ctx.data)
 
 }
+let label = d3.select("#labelGliderAnnee")
+.text(`Choisir une année : ${ctx.date}`)
 console.log(annee)
 }
