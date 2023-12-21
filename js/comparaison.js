@@ -37,10 +37,8 @@ function CreateComparaison() {
 }
 
 function CreateSelecteur(data) {
-  let compare = d3
-    .select("#compare")
-    .append("g")
-    .attr("transform", "translate(0,0");
+  let compare = d3.select("#compare").append("g");
+
   let selecteur1 = compare
     .append("select")
     .attr("y", 0)
