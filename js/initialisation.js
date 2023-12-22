@@ -58,9 +58,17 @@ function CreateHeader() {
     .append("text")
     .text("Sustainable Development Goals and world statistics")
     .style("font-size", "30px")
-    .style("font-weight", "bold")
+    .style("font-weight", "thin")
     .attr("y", 30)
     .attr("stroke", "green");
+
+  svg
+    .append("text")
+    .html("Alex Dembélé, Paul Poirmeur, Lorenzo Perrier de La Bâthie")
+    .attr("font-style", "italic")
+    .style("font-size", "15px")
+    .style("font-weight", "thin")
+    .attr("y", 50);
 
   svg
     .append("text")
@@ -135,6 +143,7 @@ function CreateHeader() {
 
     .on("change", function () {
       // Update the checkbox status when it changes
+      console.log(loopCheckboxChecked);
       loopCheckboxChecked = this.checked;
       if (loopCheckboxChecked) {
         loopSlider();
@@ -183,35 +192,31 @@ function CreateHeader() {
     });
 
   // Function to handle slider looping
+  // Function to handle slider looping
+  let loopTimer;
   function loopSlider() {
     let currentValue = +slider.property("value");
     let maxValue = +slider.attr("max");
 
-    if (currentValue === maxValue) {
-      // If at the maximum value, loop back to the minimum value
-      slider
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear)
-        .attr("value", +slider.attr("min"));
-      labelGlider.text("Year : " + slider.property("min"));
-    } else {
-      // Increment the slider value with animation
-      slider
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear)
-        .attr("value", currentValue + 1);
-      labelGlider.text("Year : " + (currentValue + 1));
+    if (loopCheckboxChecked) {
+      // Check if the loop is enabled
+      if (currentValue === maxValue) {
+        // If at the maximum value, loop back to the minimum value
+        slider.property("value", +slider.attr("min")).dispatch("input");
+        labelGlider.text("Year : " + slider.property("min"));
+      } else {
+        // Increment the slider value
+        slider.property("value", currentValue + 1).dispatch("input");
+        labelGlider.text("Year : " + (currentValue + 1));
+      }
+
+      // Clear existing timer and start a new one
+      clearTimeout(loopTimer);
+      loopTimer = setTimeout(loopSlider, 500); // Adjust the delay as needed
     }
 
     // Call the changeDate function when the slider value changes
     changeDate();
-
-    // Check if the checkbox is checked and loop again if needed
-    if (loopCheckboxChecked) {
-      setTimeout(loopSlider, 500); // Adjust the delay as needed
-    }
   }
 }
 
