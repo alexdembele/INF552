@@ -1,5 +1,22 @@
 const ctc={
-    data:{}
+    data:{},
+    attribut1:"population",
+    attribut2:"population",
+    maxPopulation:3412175000,
+    maxVie:100,
+    maxRNB:80000,
+    maxSurface:16376870,
+    maxPIBHab:81763,
+    maxEnerg:19903,
+    maxEdu:96,
+    maxEmi:10944686,
+    maxCho:30,
+    w:200,
+    
+
+
+
+
 }
 
 function loadDataEducation()
@@ -10,8 +27,9 @@ function loadDataEducation()
     
     d3.csv("data/education.csv").then(function (data) {
         let arr= {}
-
+        ctc.Codes=[]
         data.forEach(element => {
+            ctc.Codes.push(element["Country Code"])
             arr[element["Country Code"]]={}
             arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
@@ -20,7 +38,7 @@ function loadDataEducation()
             }
             
         });
-        ctc.data["population"]=arr
+        ctc.data["education"]=arr
         loadDataChomage()
         }).catch(function (err) { console.log(err); });
 
@@ -224,6 +242,7 @@ function loadDataGoal()
         
         }).catch(function (err) { console.log(err); });*/
         CreateCorrelation();
+
 }
 
 
@@ -269,10 +288,8 @@ function CreateCorrelation()
         .attr("id", "monSelecteur2")
         
 
-    let options = ["population","esperanceVie","RNB","surface","PIB","PIBHabitant","energieEqu",
-                    "education","emissionCO2","bonheur","chomage","goal1","goal2","goal3","goal4",
-                    "goal5","goal6","goal7","goal8","goal9","goal10","goal11","goal12","goal13",
-                    "goal14","goal15","goal16","goal17"]
+    let options = ["population","esperanceVie","RNB","surface","PIBHabitant","energieEqu",
+                    "education","emissionCO2","chomage"]
 
 
     selecteur1.selectAll("myOptions")
@@ -315,18 +332,198 @@ function CreateCorrelation()
     .text("Ordonnee")
 
     //creation du graphique
+    let graph=rec.append("g")
+    .attr("id","graphCorr")
+    .attr("transform","translate(400,40)")
 
+    selecteur1.on("change", function () { 
+        
+        let A =d3.select(this).property("value");
+        ctc.attribut1=A
+        updateCorrelation()
+           });
+    selecteur2.on("change", function () { 
+        
+        let A =d3.select(this).property("value");
+        ctc.attribut2=A
+        updateCorrelation()
+               });
+    
+    let circles = graph.selectAll("circles")
+               .data(ctc.Codes)
+               .enter()
+               .append("circle")
+               .attr("id","cercle")
+               .attr("r",5)
+               .attr("cx",d =>xPos(ctc.data[ctc.attribut1][d][ctx.date]))
+               .attr("cy",d =>yPos(ctc.data[ctc.attribut2][d][ctx.date]))
+    
 
+    
+    
+    rec.append("g").attr("id","xAxis")
+    .attr("transform", "translate(400, 400)")
+    
+    rec.append("g").attr("id","yAxis")
+    .attr("transform", "translate(400, 400)")
 
 }
 
-function xPos()
+function updateCorrelation()
+{
+    let circles=d3.select("#graphCorr").selectAll("#cercle")
+    .transition()
+    .duration(1000)
+    .attr("cx",d =>xPos(ctc.data[ctc.attribut1][d][ctx.date]))
+    .attr("cy",d=>yPos(ctc.data[ctc.attribut2][d][ctx.date]))
+    
+
+}
+function colorCircle()
 {
 
 }
 
-function yPos()
+function xPos(x)
 {
+    if (ctc.attribut1=="population")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxPopulation])
+        .range([0,ctc.w]);
+    }
+    if (ctc.attribut1=="chomage")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxCho])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="esperanceVie")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxVie])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="education")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxEdu])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="RNB")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxRNB])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="PIBHabitant")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxPIBHab])
+        .range([0,ctc.w]);
+    }
+    if (ctc.attribut1=="surface")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxSurface])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="energie")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxEnerg])
+        .range([0,ctc.w]);
+    }
+    if (ctc.attribut1=="emission")
+    {
+        ctc.xScale=d3.scaleLinear()
+        .domain([0, ctc.maxEmi])
+        .range([0,ctc.w]);
+
+    }
+    
+    let axeX = d3.axisBottom(ctc.xScale)
+    
+    d3.select("#xAxis")
+    .call(axeX);
+    return ctc.xScale(x)
+}
+
+function yPos(y)
+{
+    if (ctc.attribut1=="population")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxPopulation])
+        .range([0,ctc.w]);
+    }
+    if (ctc.attribut1=="chomage")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxCho])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="esperanceVie")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxVie])
+        .range([-ctc.w,0]);
+
+    }
+    if (ctc.attribut1=="education")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxEdu])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="RNB")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxRNB])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="PIBHabitant")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxPIBHab])
+        .range([0,ctc.w]);
+    }
+    if (ctc.attribut1=="surface")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxSurface])
+        .range([0,ctc.w]);
+
+    }
+    if (ctc.attribut1=="energie")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxEnerg])
+        .range([0,ctc.w]);
+    }
+    if (ctc.attribut1=="emission")
+    {
+        ctc.yScale=d3.scaleLinear()
+        .domain([0, ctc.maxEmi])
+        .range([0,ctc.w]);
+
+    }
+    let axeY= d3.axisLeft(ctc.yScale)
+    
+    d3.select("#yAxis")
+    
+    .call(axeY);
+    
+
+    return ctc.xScale(y)
 
 }
 
