@@ -222,6 +222,18 @@ function LoadData()
         ctx.data=data;
         
         ColorMap(data)}).catch(function (err) { console.log(err); });
+     //creation array drapeau
+     d3.csv("data/flag.csv").then(function (data) {
+        ctx.flag={}
+        ctx.subregion={}
+        data.forEach(element => { ctx.flag[element.country]=element.image_url
+            ctx.subregion[element.country]=element["sub-region"]
+            
+            
+        });
+        
+        }).catch(function (err) { console.log(err); });
+
 };
 
 function ColorMap(data)
@@ -262,14 +274,7 @@ function ColorMap(data)
 
 function CreateStats(data)
 {
-    //creation array drapeau
-    d3.csv("data/flag.csv").then(function (data) {
-        ctx.flag={}
-        data.forEach(element => { ctx.flag[element.country]=element.image_url
-            
-        });
-        
-        }).catch(function (err) { console.log(err); });
+   
 
     //Svg de la partie statistique
     let rec= d3.select("#stats").append("svg")
@@ -285,13 +290,32 @@ function CreateStats(data)
     .style('opacity',0.1)
 
     //Titre de la partie statistique
+
+    rec.append("rect")
+    .attr("width",135)
+    .attr("height",30)
+    
+    .attr("fill","green")
+    .style("opacity",0.8)
+
+
    rec.append("text")
+   .attr("x",5)
    .attr("y",20)
    .text("Statistiques")  
     .style("font-size", "24px")  
     .style("font-weight", "bold"); 
+
+    
     
     //Nom du pays dont on va montrer les stats
+    rec.append("rect")
+    .attr("width",160)
+    .attr("height",30)
+    .attr("x",135)
+    .attr("fill","green")
+    .style("opacity",0.6)
+
     rec.append("text")
     .attr("x",150)
     .attr("y",20)
@@ -307,7 +331,25 @@ function CreateStats(data)
         .attr("width",64)
         .attr("height",36)
         .attr("x",150)
-        .attr("y",25)
+        .attr("y",35)
+
+    //sub-region
+    rec.append("rect")
+    .attr("width",300)
+    .attr("height",30)
+    .attr("x",294)
+    .attr("fill","green")
+    .style("opacity",0.6)
+
+    rec.append("text")
+    .attr("x",300)
+    .attr("y",20)
+    .attr("id","regionName")
+    .text("Western Europe")  
+     .style("font-size", "18px")  
+     .style("font-weight", "bold")
+     .style("fill","blue")
+
         
 
 
@@ -324,6 +366,7 @@ function updateStats(data)
     // On moddifie le nom du pays étudié
     d3.select("#countryName").text(ctx.statCountry)
     d3.select("#drapeau").attr("xlink:href",ctx.flag[ctx.statCountry])
+    d3.select("#regionName").text(ctx.subregion[ctx.statCountry])
     
 
    
@@ -342,5 +385,5 @@ if (annee>=2000 && annee<=2022)
 }
 let label = d3.select("#labelGliderAnnee")
 .text(`Choisir une année : ${ctx.date}`)
-console.log(annee)
+
 }

@@ -20,8 +20,15 @@ function CreateComparaison()
     .attr('fill', 'light blue')
     .style('opacity',0.1)
 
+    rec.append("rect")
+    .attr("width",1600)
+    .attr("height",30)
+    
+    .attr("fill","#84a5db")
+    .style("opacity",0.6)
     rec.append("text")
    .attr("y",20)
+   .attr("x",5)
    .text("Comparaison")  
     .style("font-size", "24px")  
     .style("font-weight", "bold");
