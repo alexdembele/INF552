@@ -96,8 +96,9 @@ function CreateHeader() {
       d3.select("#pictoSDG").style("opacity", 0);
     });
 
+  //glider
   let labelGlider = d3
-    .select("#header")
+    .select("#fixed-header")
     .append("label")
     .attr("id", "labelGliderAnnee")
     .text("Year : 2000 ")
@@ -105,7 +106,7 @@ function CreateHeader() {
     .style("text-align", "center"); // Center the label;
 
   let slider = d3
-    .select("#header")
+    .select("#fixed-header")
     .append("input")
     .attr("type", "range")
     .attr("id", "year-picker-input")
@@ -121,14 +122,14 @@ function CreateHeader() {
     });
 
   // Add a container div
-  let checkboxContainer = d3.select("#header").append("div");
+  let checkboxContainer = d3.select("#fixed-header").append("div");
 
   // Add a checkbox
   let checkbox = checkboxContainer
     .append("input")
     .attr("type", "checkbox")
     .attr("id", "loop-checkbox")
-    .style("margin-left", "100px") // Center the checkbox
+
     .on("change", function () {
       // Update the checkbox status when it changes
       loopCheckboxChecked = this.checked;
@@ -361,8 +362,8 @@ function CreateStats(data) {
     .select("#stats")
     .append("svg")
     .attr("width", 800)
-    .attr("height", 540)
-    .attr("transform", "translate(800,-540)");
+    .attr("height", 540);
+  // .attr("transform", "translate(800,-540)");
 
   // FOnd de la partie statistique
   rec
