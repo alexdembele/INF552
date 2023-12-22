@@ -28,7 +28,7 @@ function CreateComparaison()
 
     d3.csv("data/sustainable_development_report_2023.csv").then(function (data) {
         CreateSelecteur(data)
-        GraphMultiLigne()}).catch(function (err) { console.log(err); });
+        }).catch(function (err) { console.log(err); });
     
     
 }

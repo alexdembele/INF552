@@ -38,8 +38,7 @@ function CreateHeader()
         .attr("width",300)
         .attr("height",150)
         .style("opacity",0)
-        .attr("x",1000)
-
+        
     svg.append("text")
     .text("Critère SDG : ")
     .style("font-size", "15px")  
@@ -263,6 +262,15 @@ function ColorMap(data)
 
 function CreateStats(data)
 {
+    //creation array drapeau
+    d3.csv("data/flag.csv").then(function (data) {
+        ctx.flag={}
+        data.forEach(element => { ctx.flag[element.country]=element.image_url
+            
+        });
+        
+        }).catch(function (err) { console.log(err); });
+
     //Svg de la partie statistique
     let rec= d3.select("#stats").append("svg")
     .attr("width", 800)
@@ -293,6 +301,16 @@ function CreateStats(data)
      .style("font-weight", "bold")
      .style("fill","blue")
 
+     //drapeau du pays
+     let image = rec.append("image").attr("id","drapeau")
+        .attr("xlink:href","https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg")
+        .attr("width",64)
+        .attr("height",36)
+        .attr("x",150)
+        .attr("y",25)
+        
+
+
     
 }
 
@@ -305,6 +323,8 @@ function updateStats(data)
 
     // On moddifie le nom du pays étudié
     d3.select("#countryName").text(ctx.statCountry)
+    d3.select("#drapeau").attr("xlink:href",ctx.flag[ctx.statCountry])
+    
 
    
 }
