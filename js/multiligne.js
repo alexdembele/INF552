@@ -36,6 +36,7 @@ function loadRegion()
     .text(function (d) { return d; }) 
     .attr("value", function (d) { return d; })
     
+    
     choisiRegion.on("change", function () { 
         
         let A =d3.select(this).property("value");
@@ -193,7 +194,7 @@ function multiLigne(data)
                .attr("transform", "translate(0, 950)")  // Déplacer l'axe au bas du SVG
                .call(axeX);
 
-               //axe ordonnée
+               //axes ordonnées
                let years=[]
                for(t=2000;t<=2022;t++)
                {
@@ -212,6 +213,13 @@ function multiLigne(data)
                .attr("stroke-width", 0.5)
                .style("opacity",1)
                .attr("d", generateurOrdonnee)
+
+               let ordo = d3.axisLeft(cty.yScale)
+               let formatAxeY=d3.format(".0f")
+               axeX.tickFormat(formatAxeY);
+               svg.append("g")
+               .attr("transform", "translate(30, 0)")  // Déplacer l'axe au bas du SVG
+               .call(ordo);
                
 
 
@@ -292,14 +300,14 @@ function multiLigne(data)
            
                paths.on("mouseover", function (event,d) {
                    d3.select(this)
-                   .attr("stroke-width", 2)
-                   .attr("stroke","blue")
+                   .attr("stroke-width", 10)
+    
                    cty.pays=d[0]["pays"]
                    d3.select("#surligne").text("Pays surligné : "+d[0]["pays"])
                })
                .on("mouseout", function (d) {
                    d3.select(this)
-                   .attr("stroke","gray")
+                   
                    .attr("stroke-width", 1)
                    
                })
