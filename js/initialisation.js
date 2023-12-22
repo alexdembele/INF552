@@ -15,7 +15,7 @@ function createViz() {
   LoadData();
   CreateComparaison();
   InitialiseStats();
-  CreateCorrelation();
+  loadDataEducation();
 }
 let loopCheckboxChecked = false;
 
