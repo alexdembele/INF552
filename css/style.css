@@ -28,7 +28,7 @@ body {
   width: 100%;
   top: 130px; /* Initial position beneath the top */
   transition: top 0.3s ease; /* Add a smooth transition effect */
-  z-index: 1000;
+  z-index: 200;
 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Add a subtle box shadow */
 }
@@ -136,4 +136,62 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* multiligne*/
+/* Style for the goal selector */
+#multiLigne,
+#multiRegion {
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #3498db; /* Add a border with a color of your choice */
+  border-radius: 8px; /* Add rounded corners */
+  background-color: #ecf0f1; /* Add a background color */
+}
+
+/* Style for the labels */
+/* Style for the goal selector */
+#multiLigne,
+#multiRegion {
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #3498db; /* Add a border with a color of your choice */
+  border-radius: 8px; /* Add rounded corners */
+  background-color: #ecf0f1; /* Add a background color */
+}
+
+/* Style for the labels */
+label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Style for the options in the selectors */
+#multiLigne option,
+#multiRegion option {
+  font-size: 14px;
+}
+
+/* Add a hover effect to the options in the selectors */
+#multiLigne option:hover,
+#multiRegion option:hover {
+  background-color: #27ae60; /* Change the background color on hover */
+  color: #fff; /* Change the text color on hover */
+  cursor: pointer;
+}
+
+/* Add a hover effect to the labels */
+label:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#surligne,
+#change {
+  rx: 10px; /* Set the horizontal radius for rounded corners */
+  ry: 10px; /* Set the vertical radius for rounded corners */
+  filter: drop-shadow(5px 5px 3px rgba(0, 0, 0, 0.3)); /* Add a drop shadow */
+  font-family: "Verdana ", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
 }
