@@ -1,13 +1,52 @@
 const cty=
 {
-    pays:"France"
+    pays:"France",
+    subRegions:[]
 }
 
 function initViz()
 {
+    loadRegion()
     initHeader();
-    CreateMultiLigne();
+    CreateMultiLigne()
 }
+
+function loadRegion()
+{
+    d3.csv("data/flag.csv").then(function (data) {
+        cty.subRegions = [...new Set(data.map(d => d["sub-region"]))]
+        cty.subRegions.push("None")
+        cty.subregion={}
+        data.forEach(element => { 
+            cty.subregion[element.country]=element["sub-region"]
+          
+            
+        });
+        let choisiRegion=d3.select("#header").append("select")
+    .attr("id","multiRegion")
+
+    let labelRegion = d3.select("#header").append("label")
+    .attr("for","multiRegion")
+    .text("  Choisissez une region ")
+
+    choisiRegion.selectAll('myOptions')
+    .data(cty.subRegions)
+    .enter()
+    .append('option')
+    .text(function (d) { return d; }) 
+    .attr("value", function (d) { return d; })
+    
+    choisiRegion.on("change", function () { 
+        
+        let A =d3.select(this).property("value");
+        updateAggregat(A)
+           });
+
+
+    }).catch(function (err) { console.log(err); });
+}
+
+
 
 function initHeader()
 {
@@ -78,12 +117,16 @@ function CreateMultiLigne()
     let selecteur= d3.select("#header").append("select")
     .attr("id","multiLigne")
     
-    .attr("transform","translate(0,-540)")
+    
     let label = d3.select("#header").append("label")
     .attr("for","multiligne")
     .text("  Choisissez un goal ")
+
+    
+    
     
     let goals = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,"global"]
+    
     
 
     selecteur.selectAll('myOptions')
@@ -98,6 +141,8 @@ function CreateMultiLigne()
         let A =d3.select(this).property("value");
         updateMultiLigne(A)
            });
+
+   
 
     
     
@@ -292,4 +337,28 @@ function updateMultiLigne(A)
            
            
            
+}
+
+function updateAggregat(A)
+{
+    paths=d3.selectAll("#multipath")
+                
+               .attr("stroke",d=>ColorStroke(d[0].pays,A)) 
+                
+}
+
+function ColorStroke(pays,A)
+{
+    
+    
+    if(cty.subregion[pays]==A)
+    {
+
+        return "red"
+    }
+    else
+    {
+        return "gray"
+    }
+    
 }
