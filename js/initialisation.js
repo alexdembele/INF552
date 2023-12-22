@@ -38,8 +38,7 @@ function CreateHeader() {
     .attr("alt", "pictogramme sdg")
     .attr("width", 300)
     .attr("height", 150)
-    .style("opacity", 0)
-    .attr("x", 1000);
+    .style("opacity", 0);
 
   svg
     .append("text")
@@ -137,6 +136,48 @@ function CreateMap() {
     .attr("height", ctx.height)
     .attr("transform", "translate(-80,10)");
 
+  let gradient = svg
+    .append("defs")
+    .append("linearGradient")
+    .attr("id", "gradient")
+    .attr("x1", "0%") // Début du dégradé à 0% (gauche)
+    .attr("x2", "100%"); // Fin du dégradé à 100% (droite)
+
+  gradient.append("stop").attr("offset", "0%").attr("stop-color", "green"); // Vert
+
+  gradient.append("stop").attr("offset", "50%").attr("stop-color", "white"); // Blanc au milieu
+
+  gradient.append("stop").attr("offset", "100%").attr("stop-color", "red"); // Rouge
+
+  svg
+    .append("rect")
+    .attr("width", 90)
+    .attr("height", 160)
+    .attr("x", 100)
+    .attr("y", 400)
+    .attr("height", 20)
+    .style("fill", "url(#gradient)");
+
+  let echelleScale = d3
+    .scaleLinear()
+    .domain([0, 100]) // Les points de référence pour les couleurs
+    .range([0, 100]); // Les couleurs correspondantes
+
+  let axeX = d3.axisBottom(echelleScale);
+  axeX.ticks(5);
+  svg
+    .append("g")
+    .attr("transform", "translate(100, 430)") // Déplacer l'axe au bas du SVG
+    .call(axeX);
+
+  svg
+    .append("text")
+    .text("SDG Global Score")
+    .attr("stroke", "black")
+    .style("font-size", "13px")
+    .attr("x", 100)
+    .attr("y", 380);
+
   d3.json("data/country-110m.json").then(function (world) {
     //Construction carte
     svg
@@ -175,6 +216,19 @@ function LoadData() {
       ctx.data = data;
 
       ColorMap(data);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  //creation array drapeau
+  d3.csv("data/flag.csv")
+    .then(function (data) {
+      ctx.flag = {};
+      ctx.subregion = {};
+      data.forEach((element) => {
+        ctx.flag[element.country] = element.image_url;
+        ctx.subregion[element.country] = element["sub-region"];
+      });
     })
     .catch(function (err) {
       console.log(err);
@@ -225,8 +279,18 @@ function CreateStats(data) {
     .style("opacity", 0.1);
 
   //Titre de la partie statistique
+
+  rec
+    .append("rect")
+    .attr("width", 135)
+    .attr("height", 30)
+
+    .attr("fill", "green")
+    .style("opacity", 0.8);
+
   rec
     .append("text")
+    .attr("x", 5)
     .attr("y", 20)
     .text("Statistiques")
     .style("font-size", "24px")
@@ -234,11 +298,51 @@ function CreateStats(data) {
 
   //Nom du pays dont on va montrer les stats
   rec
+    .append("rect")
+    .attr("width", 160)
+    .attr("height", 30)
+    .attr("x", 135)
+    .attr("fill", "green")
+    .style("opacity", 0.6);
+
+  rec
     .append("text")
     .attr("x", 150)
     .attr("y", 20)
     .attr("id", "countryName")
     .text(ctx.statCountry)
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+  //drapeau du pays
+  let image = rec
+    .append("image")
+    .attr("id", "drapeau")
+    .attr(
+      "xlink:href",
+      "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg"
+    )
+    .attr("width", 64)
+    .attr("height", 36)
+    .attr("x", 150)
+    .attr("y", 35);
+
+  //sub-region
+  rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 294)
+    .attr("fill", "green")
+    .style("opacity", 0.6);
+
+  rec
+    .append("text")
+    .attr("x", 300)
+    .attr("y", 20)
+    .attr("id", "regionName")
+    .text("Western Europe")
     .style("font-size", "18px")
     .style("font-weight", "bold")
     .style("fill", "blue");
@@ -249,6 +353,8 @@ function updateStats(data) {
 
   // On moddifie le nom du pays étudié
   d3.select("#countryName").text(ctx.statCountry);
+  d3.select("#drapeau").attr("xlink:href", ctx.flag[ctx.statCountry]);
+  d3.select("#regionName").text(ctx.subregion[ctx.statCountry]);
 }
 
 function changeDate() {
