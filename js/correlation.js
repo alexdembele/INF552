@@ -1,8 +1,13 @@
-
+const ctc={
+    data:[]
+}
 
 function loadDataCorr()
 {
-
+    //que pour 2022 ?
+    //format [{pays:name,population:,goal:}]
+    d3.csv("data/sdg_index_2000-2022.csv").then(function (data) {
+        multiLigne(data)}).catch(function (err) { console.log(err); });
 }
 
 function CreateCorrelation()
