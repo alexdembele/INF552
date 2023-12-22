@@ -13,6 +13,7 @@ function createViz() {
   CreateStats();
   LoadData();
   CreateComparaison();
+  InitialiseStats();
   CreateCorrelation();
 }
 
@@ -349,6 +350,11 @@ function CreateStats(data) {
     .style("fill", "blue");
 }
 
+function InitialiseStats(data) {
+  initialiseRadarChart();
+  initialiseBarChart();
+}
+
 function updateStats(data) {
   let svg = d3.select("#stats svg");
 
@@ -356,6 +362,9 @@ function updateStats(data) {
   d3.select("#countryName").text(ctx.statCountry);
   d3.select("#drapeau").attr("xlink:href", ctx.flag[ctx.statCountry]);
   d3.select("#regionName").text(ctx.subregion[ctx.statCountry]);
+  updateRadarChart();
+  updatePIB();
+  updatePIBchart();
 }
 
 function changeDate() {
