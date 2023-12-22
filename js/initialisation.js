@@ -157,21 +157,28 @@ function CreateHeader() {
 
     if (currentValue === maxValue) {
       // If at the maximum value, loop back to the minimum value
-      slider.property("value", +slider.attr("min"));
-      labelGlider.text("Year : " + slider.property("value"));
+      slider
+        .transition()
+        .duration(500)
+        .ease(d3.easeLinear)
+        .attr("value", +slider.attr("min"));
+      labelGlider.text("Year : " + slider.property("min"));
     } else {
-      // Increment the slider value
-      slider.property("value", currentValue + 1);
-      labelGlider.text("Year : " + slider.property("value"));
+      // Increment the slider value with animation
+      slider
+        .transition()
+        .duration(500)
+        .ease(d3.easeLinear)
+        .attr("value", currentValue + 1);
+      labelGlider.text("Year : " + (currentValue + 1));
     }
 
     // Call the changeDate function when the slider value changes
     changeDate();
-    console.log(loopCheckboxChecked);
+
     // Check if the checkbox is checked and loop again if needed
     if (loopCheckboxChecked) {
-      console.log("again");
-      setTimeout(loopSlider, 300); // Adjust the delay as needed
+      setTimeout(loopSlider, 500); // Adjust the delay as needed
     }
   }
 }
@@ -198,8 +205,8 @@ function CreateMap() {
     .append("defs")
     .append("linearGradient")
     .attr("id", "gradient")
-    .attr("x1", "0%") // Début du dégradé à 0% (gauche)
-    .attr("x2", "100%"); // Fin du dégradé à 100% (droite)
+    .attr("x1", "100%") // Début du dégradé à 0% (gauche)
+    .attr("x2", "0%"); // Fin du dégradé à 100% (droite)
 
   gradient.append("stop").attr("offset", "0%").attr("stop-color", "green"); // Vert
 
