@@ -74,11 +74,11 @@ function drawRadarChart(data) {
   let svg = d3
     .select("#stats svg")
     .append("svg")
-    .attr("id","diamant")
+    .attr("id", "diamant")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", `translate(${margin.left+120},${margin.top})`);
+    .attr("transform", `translate(${margin.left + 120},${margin.top})`);
 
   const radius = Math.min(width, height) / 2;
 
@@ -385,9 +385,9 @@ function PIBBarchart(countryName, rawData, left, top, name) {
     svg
       .append("rect")
       .attr("class", `bar${index}`)
-      .attr("id","indPIB")
-      .attr("x", 55 + index * (barWidth + spacing)+50)
-      .attr("y", height - barHeight + 25+100)
+      .attr("id", "indPIB")
+      .attr("x", 55 + index * (barWidth + spacing) + 50)
+      .attr("y", height - barHeight + 25 + 100)
       .attr("width", barWidth)
       .attr("height", barHeight)
       .attr("fill", "steelblue");
@@ -426,7 +426,7 @@ function updatePIBchart() {
   rawData = cts.PIB;
   maxOverall = 3000000000000;
   selectedCountryData = rawData.find(
-    (entry) => entry["Country Code"] == ctx.countryCode[ctx.statCountry]
+    (entry) => entry["Country Code"] == ctx.countryCode
   );
 
   if (!selectedCountryData) {
