@@ -366,6 +366,7 @@ function PIBBarchart(countryName, rawData, left, top, name) {
   let svg = d3
     .select("#stats svg")
     .append("svg")
+    .attr("id", "indPIB")
     .attr("width", width + 50)
     .attr("height", height + 100)
     .attr("transform", `translate(${left},${top})`);
@@ -386,6 +387,8 @@ function PIBBarchart(countryName, rawData, left, top, name) {
       .append("rect")
       .attr("class", `bar${index}`)
       .attr("id", "indPIB")
+      .attr("x", 55 + index * (barWidth + spacing) + 50)
+      .attr("y", height - barHeight + 25 + 100)
       .attr("x", 55 + index * (barWidth + spacing) + 50)
       .attr("y", height - barHeight + 25 + 100)
       .attr("width", barWidth)
