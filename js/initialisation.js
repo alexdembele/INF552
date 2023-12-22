@@ -45,6 +45,8 @@ function loadRegime() {
       console.log(err);
     });
 }
+
+
 let loopCheckboxChecked = false;
 
 function CreateHeader() {
@@ -488,6 +490,168 @@ function CreateStats(data) {
     .style("font-size", "18px")
     .style("font-weight", "bold")
     .style("fill", "blue");
+
+    //PIB 
+
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 60)
+    .attr("fill", "#F9A232")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 80)
+    .attr("id","PIBtext")
+    .text("PIB/hab(USD) : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+    //population
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 90)
+    .attr("fill", "#AF69F9")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 110)
+    .attr("id","Populationtext")
+    .text("Population : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+    //esperance de Vie
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 120)
+    .attr("fill", "#FA6F6F")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 140)
+    .attr("id","Vietext")
+    .text("Age moyen : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+    //RNB
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 150)
+    .attr("fill", "#FAF86F")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 170)
+    .attr("id","RNBtext")
+    .text("RNB(USD) : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+    //Energ
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 180)
+    .attr("fill", "#8CD5F7")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 200)
+    .attr("id","Energietext")
+    .text("Energie : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+      //Education
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 210)
+    .attr("fill", "#F78CE7")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 230)
+    .attr("id","Edutext")
+    .text("Education : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+  //emission CO2
+  rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 240)
+    .attr("fill", "#F93134")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 260)
+    .attr("id","CO2text")
+    .text("Emission CO2 : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+    //chomage
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y", 270)
+    .attr("fill", "#B5B9B5")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 290)
+    .attr("id","chomagetext")
+    .text("Chomage(%) : ")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+
 }
 
 function InitialiseStats(data) {
@@ -507,6 +671,15 @@ function updateStats(data) {
     "Surface(km²) : " + ctc.data.surface[ctx.countryCode][ctx.date]
   );
   d3.select("#regime").text(ctx.regime[ctx.countryCode]);
+  console.log(ctc.data.PIB[ctx.countryCode][ctx.date])
+  d3.select("#PIBtext").text("PIB/hab(USD) : " + (ctc.data.PIBHabitant[ctx.countryCode][ctx.date]).toString()+" USD")
+  d3.select("#Populationtext").text("Population : " + (ctc.data.population[ctx.countryCode][ctx.date]).toString())
+  d3.select("#Vietext").text("Age moyen : " + (ctc.data.esperanceVie[ctx.countryCode][ctx.date]).toString()+" ans")
+  d3.select("#RNBtext").text("RNB(USD) : " + (ctc.data.RNB[ctx.countryCode][ctx.date]).toString())
+  d3.select("#Energietext").text("Energie : " + (ctc.data.energie[ctx.countryCode][ctx.date]).toString())
+  d3.select("#Edutext").text("Education : " + (ctc.data.education[ctx.countryCode][ctx.date]).toString())
+  d3.select("#CO2text").text("Emission CO2 : " + (ctc.data.emission[ctx.countryCode][ctx.date]).toString())
+  d3.select("#chomagetext").text("Chomage(%) : " + (ctc.data.chomage[ctx.countryCode][ctx.date]).toString())
   updateRadarChart();
   // updatePIB();
   // updatePIBchart();
