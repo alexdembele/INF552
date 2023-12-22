@@ -19,34 +19,31 @@ function createViz() {
   loadRegime();
 }
 
-function loadRegime()
-{
-  d3.csv("data/Regimes.csv").then(function (data) {
-    let arr = {}
-    let n = 0
-    data.forEach(element=>{
-      n = element["Political regime"]
-      if(n==0)
-      {
-        arr[element.Code]="Autocratie fermée"
-      }
-      if(n==1)
-      {
-        arr[element.Code]="Autocratie ouverte"
-      }
-      if(n==2)
-      {
-        arr[element.Code]="Démocratie électorale"
-      }
-      if(n==3)
-      {
-        arr[element.Code]="Democratie libérale"
-      }
-
-
+function loadRegime() {
+  d3.csv("data/Regimes.csv")
+    .then(function (data) {
+      let arr = {};
+      let n = 0;
+      data.forEach((element) => {
+        n = element["Political regime"];
+        if (n == 0) {
+          arr[element.Code] = "Autocratie fermée";
+        }
+        if (n == 1) {
+          arr[element.Code] = "Autocratie ouverte";
+        }
+        if (n == 2) {
+          arr[element.Code] = "Démocratie électorale";
+        }
+        if (n == 3) {
+          arr[element.Code] = "Democratie libérale";
+        }
+      });
+      ctx.regime = arr;
+    })
+    .catch(function (err) {
+      console.log(err);
     });
-    ctx.regime = arr
-  }).catch(function (err) { console.log(err); });
 }
 let loopCheckboxChecked = false;
 
@@ -188,21 +185,28 @@ function CreateHeader() {
 
     if (currentValue === maxValue) {
       // If at the maximum value, loop back to the minimum value
-      slider.property("value", +slider.attr("min"));
-      labelGlider.text("Year : " + slider.property("value"));
+      slider
+        .transition()
+        .duration(500)
+        .ease(d3.easeLinear)
+        .attr("value", +slider.attr("min"));
+      labelGlider.text("Year : " + slider.property("min"));
     } else {
-      // Increment the slider value
-      slider.property("value", currentValue + 1);
-      labelGlider.text("Year : " + slider.property("value"));
+      // Increment the slider value with animation
+      slider
+        .transition()
+        .duration(500)
+        .ease(d3.easeLinear)
+        .attr("value", currentValue + 1);
+      labelGlider.text("Year : " + (currentValue + 1));
     }
 
     // Call the changeDate function when the slider value changes
     changeDate();
-    console.log(loopCheckboxChecked);
+
     // Check if the checkbox is checked and loop again if needed
     if (loopCheckboxChecked) {
-      console.log("again");
-      setTimeout(loopSlider, 300); // Adjust the delay as needed
+      setTimeout(loopSlider, 500); // Adjust the delay as needed
     }
   }
 }
@@ -229,8 +233,8 @@ function CreateMap() {
     .append("defs")
     .append("linearGradient")
     .attr("id", "gradient")
-    .attr("x1", "0%") // Début du dégradé à 0% (gauche)
-    .attr("x2", "100%"); // Fin du dégradé à 100% (droite)
+    .attr("x1", "100%") // Début du dégradé à 0% (gauche)
+    .attr("x2", "0%"); // Fin du dégradé à 100% (droite)
 
   gradient.append("stop").attr("offset", "0%").attr("stop-color", "green"); // Vert
 
@@ -446,8 +450,8 @@ function CreateStats(data) {
     .style("font-weight", "bold")
     .style("fill", "blue");
 
-    //surface 
-    rec
+  //surface
+  rec
     .append("rect")
     .attr("width", 300)
     .attr("height", 30)
@@ -465,13 +469,13 @@ function CreateStats(data) {
     .style("font-weight", "bold")
     .style("fill", "blue");
 
-    //regime politique
-    rec
+  //regime politique
+  rec
     .append("rect")
     .attr("width", 300)
     .attr("height", 30)
     .attr("x", 594)
-    .attr("y",30)
+    .attr("y", 30)
     .attr("fill", "#32F9E4")
     .style("opacity", 0.4);
 
@@ -484,7 +488,6 @@ function CreateStats(data) {
     .style("font-size", "18px")
     .style("font-weight", "bold")
     .style("fill", "blue");
-
 }
 
 function InitialiseStats(data) {
@@ -499,12 +502,14 @@ function updateStats(data) {
   d3.select("#countryName").text(ctx.statCountry);
   d3.select("#drapeau").attr("xlink:href", ctx.flag[ctx.statCountry]);
   d3.select("#regionName").text(ctx.subregion[ctx.statCountry]);
-  let pays = ctx.statCountry
-  d3.select("#surfaceCountry").text("Surface(km²) : "+ctc.data.surface[ctx.countryCode][ctx.date])
-  d3.select("#regime").text(ctx.regime[ctx.countryCode])
+  let pays = ctx.statCountry;
+  d3.select("#surfaceCountry").text(
+    "Surface(km²) : " + ctc.data.surface[ctx.countryCode][ctx.date]
+  );
+  d3.select("#regime").text(ctx.regime[ctx.countryCode]);
   updateRadarChart();
-  //updatePIB();
-  //updatePIBchart();
+  // updatePIB();
+  // updatePIBchart();
 }
 
 function changeDate() {
