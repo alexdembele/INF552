@@ -7,7 +7,6 @@ const cty = {
     .range(d3.schemeCategory10),
   countries: [],
 };
-//TEST
 
 function CreateComparaison() {
   let rec = d3
@@ -333,16 +332,19 @@ function updateComparaison(data) {
   }
 
   // Add links between consecutive points on vertical axis
-  const linkGroup = parallelPlot.append("g").attr("class", "link-group");
+  const lineGroup = parallelPlot.append("g").attr("class", "line-group");
 
   filteredData.forEach((countryData, countryIndex) => {
+    const countryLines = []; // To store all lines corresponding to a country
+
     for (let i = 1; i < dimensions.length; i++) {
       const x1 = i * ((width - 100) / dimensions.length) + 100;
       const y1 = scales[dimensions[i]](countryData[dimensions[i]]);
       const x2 = (i - 1) * ((width - 100) / dimensions.length) + 100;
       const y2 = scales[dimensions[i - 1]](countryData[dimensions[i - 1]]);
 
-      linkGroup
+      // Create a line for each link
+      const line = lineGroup
         .append("line")
         .attr("x1", x1)
         .attr("y1", y1)
@@ -356,6 +358,44 @@ function updateComparaison(data) {
         )
         .style("stroke-width", 1)
         .style("opacity", 0.7);
+
+      countryLines.push(line); // Add the line to the countryLines array
+
+      // Add event listeners for hover
+      line
+        .on("mouseover", function (event) {
+          // Thicken all lines corresponding to the country on hover
+          countryLines.forEach((countryLine) =>
+            countryLine.style("stroke-width", 3)
+          );
+
+          // Print the country name next to the mouse position
+          const mouseX = event.pageX + 10;
+          const mouseY = event.pageY - 10;
+
+          // Create a div for hover text and append it to the body
+          d3.select("body")
+            .append("div")
+            .attr("class", "hover-text")
+            .style("position", "absolute")
+            .style("left", mouseX + "px")
+            .style("top", mouseY + "px")
+            .style("padding", "5px")
+            .style("background-color", "lightgrey")
+            .style("border", "1px solid black") // Add border styling
+            .style("border-radius", "5px")
+            .style("font-size", "20px")
+            .style("fill", "black")
+            .text(countryData.country);
+        })
+        .on("mouseout", function () {
+          // Reset the line thickness for all lines corresponding to the country on mouseout
+          countryLines.forEach((countryLine) =>
+            countryLine.style("stroke-width", 1)
+          );
+          // Remove the country name display
+          d3.select("body").selectAll(".hover-text").remove();
+        });
     }
   });
 }
