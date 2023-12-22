@@ -1,18 +1,50 @@
 const ctc={
-    data:[]
+    data:{}
 }
 
-function loadDataCorr()
+function loadDataEducation()
 {
     //que pour 2022 ?
-    //format [{pays:name,population:,goal:}]
-    d3.csv("data/sdg_index_2000-2022.csv").then(function (data) {
-        multiLigne(data)}).catch(function (err) { console.log(err); });
+    //format {goal:{pays:{name:,annee:}}
+
+    
+    d3.csv("data/education.csv").then(function (data) {
+        let arr= {}
+        data.forEach(element => {
+            arr["name"]=element["Country Name"]
+            for(o=2000;o<=2022;o++)
+            {
+                arr[o.toString()]=element[o.toString()]
+            }
+            
+        });
+        data["population"]=arr
+        loadDataChomage()
+        }).catch(function (err) { console.log(err); });
+
+}
+
+function loadDataChomage()
+{
+    d3.csv("data/chomage.csv").then(function (data) {
+        let arr= {}
+        data.forEach(element => {
+            arr["name"]=element["Country Name"]
+            for(o=2000;o<=2022;o++)
+            {
+                arr[o.toString()]=element[o.toString()]
+            }
+            
+        });
+        data["chomage"]=arr
+        loadDataChomage()
+        }).catch(function (err) { console.log(err); });
 }
 
 function CreateCorrelation()
 {
-    debug()
+    console.log("Yousk2")
+    loadDataEducation()
     let rec=d3.select("#correlateur").append("svg")
     .attr("width", 1600)
     .attr("height", 540)
