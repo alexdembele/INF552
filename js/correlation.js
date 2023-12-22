@@ -357,8 +357,15 @@ function CreateCorrelation()
                .attr("r",5)
                .attr("cx",d =>xPos(ctc.data[ctc.attribut1][d][ctx.date]))
                .attr("cy",d =>yPos(ctc.data[ctc.attribut2][d][ctx.date]))
+    
 
-
+    
+    
+    rec.append("g").attr("id","xAxis")
+    .attr("transform", "translate(400, 400)")
+    
+    rec.append("g").attr("id","yAxis")
+    .attr("transform", "translate(400, 400)")
 
 }
 
@@ -440,7 +447,10 @@ function xPos(x)
 
     }
     
-    console.log(x,ctc.xScale(x))
+    let axeX = d3.axisBottom(ctc.xScale)
+    
+    d3.select("#xAxis")
+    .call(axeX);
     return ctc.xScale(x)
 }
 
@@ -450,13 +460,13 @@ function yPos(y)
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxPopulation])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
     }
     if (ctc.attribut1=="chomage")
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxCho])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
 
     }
     if (ctc.attribut1=="esperanceVie")
@@ -470,42 +480,47 @@ function yPos(y)
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxEdu])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
 
     }
     if (ctc.attribut1=="RNB")
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxRNB])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
 
     }
     if (ctc.attribut1=="PIBHabitant")
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxPIBHab])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
     }
     if (ctc.attribut1=="surface")
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxSurface])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
 
     }
     if (ctc.attribut1=="energie")
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxEnerg])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
     }
     if (ctc.attribut1=="emission")
     {
         ctc.yScale=d3.scaleLinear()
         .domain([0, ctc.maxEmi])
-        .range([-ctc.w,0]);
+        .range([0,ctc.w]);
 
     }
+    let axeY= d3.axisLeft(ctc.yScale)
+    
+    d3.select("#yAxis")
+    
+    .call(axeY);
     
 
     return ctc.xScale(y)
