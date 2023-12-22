@@ -386,6 +386,15 @@ function CreateStats(data) {
     .style("font-size", "24px")
     .style("font-weight", "bold");
 
+
+    // Label Bonheur
+    rec
+    .append("text")
+    .attr("x", 220)
+    .attr("y", 500)
+    .text("Bonheur")
+    .style("font-size", "24px")
+    .style("font-weight", "bold");
   //Nom du pays dont on va montrer les stats
   rec
     .append("rect")
