@@ -10,13 +10,13 @@ function loadDataEducation()
     
     d3.csv("data/education.csv").then(function (data) {
         let arr= {}
-        console.log(data[1])
+
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -31,11 +31,11 @@ function loadDataChomage()
     d3.csv("data/chomage.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -49,11 +49,11 @@ function loadDataPopulation()
     d3.csv("data/population.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -67,11 +67,11 @@ function loadDataVie()
     d3.csv("data/esperanceVie.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -85,11 +85,11 @@ function loadDataRNB()
     d3.csv("data/RNB.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -102,11 +102,11 @@ function loadDataSurface()
     d3.csv("data/surface.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -119,11 +119,11 @@ function loadDataPIB()
     d3.csv("data/PIB.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -137,11 +137,11 @@ function loadDataPIBHabitant()
     d3.csv("data/PIBHabitant.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -154,11 +154,11 @@ function loadDataEnergie()
     d3.csv("data/energieEqu.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -172,11 +172,11 @@ function loadDataCO2()
         let arr= {}
 
         data.forEach(element => {
-            arr[element["Country Name"]]={}
-            arr[element["Country Name"]]["name"]=element["Country Name"]
+            arr[element["Country Code"]]={}
+            arr[element["Country Code"]]["name"]=element["Country Code"]
             for(o=2000;o<=2022;o++)
             {
-                arr[element["Country Name"]][o.toString()]=element[o.toString()]
+                arr[element["Country Code"]][o.toString()]=element[o.toString()]
             }
             
         });
@@ -188,6 +188,8 @@ function loadDataCO2()
 function loadDataGoal()
 {
     console.log(ctc.data)
+
+    // A continuer si on a le temps
     /*d3.csv("data/sdg_index_2000-2022.csv").then(function (data) {
         let ARR = []
         for(p=0;p<18;p++)
@@ -214,7 +216,7 @@ function loadDataGoal()
             }
             if(annee="2022")
             {
-                ctc.
+                ctc.data[]
             }
             
             
@@ -312,4 +314,19 @@ function CreateCorrelation()
     .attr("y",75)
     .text("Ordonnee")
 
+    //creation du graphique
+
+
+
 }
+
+function xPos()
+{
+
+}
+
+function yPos()
+{
+
+}
+

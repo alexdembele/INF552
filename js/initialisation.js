@@ -16,6 +16,37 @@ function createViz() {
   CreateComparaison();
   InitialiseStats();
   loadDataEducation();
+  loadRegime();
+}
+
+function loadRegime()
+{
+  d3.csv("data/Regimes.csv").then(function (data) {
+    let arr = {}
+    let n = 0
+    data.forEach(element=>{
+      n = element["Political regime"]
+      if(n==0)
+      {
+        arr[element.Code]="Autocratie fermée"
+      }
+      if(n==1)
+      {
+        arr[element.Code]="Autocratie ouverte"
+      }
+      if(n==2)
+      {
+        arr[element.Code]="Démocratie électorale"
+      }
+      if(n==3)
+      {
+        arr[element.Code]="Democratie libérale"
+      }
+
+
+    });
+    ctx.regime = arr
+  }).catch(function (err) { console.log(err); });
 }
 let loopCheckboxChecked = false;
 
@@ -405,6 +436,46 @@ function CreateStats(data) {
     .style("font-size", "18px")
     .style("font-weight", "bold")
     .style("fill", "blue");
+
+    //surface 
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("fill", "green")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 20)
+    .attr("id", "surfaceCountry")
+    .text("0")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
+    //regime politique
+    rec
+    .append("rect")
+    .attr("width", 300)
+    .attr("height", 30)
+    .attr("x", 594)
+    .attr("y",30)
+    .attr("fill", "#32F9E4")
+    .style("opacity", 0.4);
+
+  rec
+    .append("text")
+    .attr("x", 600)
+    .attr("y", 50)
+    .attr("id", "regime")
+    .text("Regime")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("fill", "blue");
+
 }
 
 function InitialiseStats(data) {
@@ -419,9 +490,12 @@ function updateStats(data) {
   d3.select("#countryName").text(ctx.statCountry);
   d3.select("#drapeau").attr("xlink:href", ctx.flag[ctx.statCountry]);
   d3.select("#regionName").text(ctx.subregion[ctx.statCountry]);
+  let pays = ctx.statCountry
+  d3.select("#surfaceCountry").text("Surface(km²) : "+ctc.data.surface[ctx.countryCode][ctx.date])
+  d3.select("#regime").text(ctx.regime[ctx.countryCode])
   updateRadarChart();
-  updatePIB();
-  updatePIBchart();
+  //updatePIB();
+  //updatePIBchart();
 }
 
 function changeDate() {
