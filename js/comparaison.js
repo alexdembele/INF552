@@ -6,6 +6,25 @@ const cty = {
     .domain(d3.range(20)) // Use a larger range for more colors
     .range(d3.schemeCategory10),
   countries: [],
+  goalDescription: [
+    "Goal 1 : Eradicate poverty in all its forms and everywhere in the world",
+    "Goal 2 : End hunger, ensure food security, improve nutrition and promote sustainable agriculture",
+    "Goal 3 : Enable everyone to live in good health and promote the well-being of all at all ages",
+    "Goal 4 : Ensuring equitable, inclusive and quality education and lifelong learning opportunities for all",
+    "Goal 5 : Achieve gender equality and empower all women and girls",
+    "Goal 6 : Guarantee access for all to sustainably managed water supply and sanitation services",
+    "Goal 7 : Guarantee access for all to reliable, sustainable and modern energy services, at an affordable cost",
+    "Goal 8 : Promote sustained, shared and sustainable economic growth, full and productive employment and decent work for all",
+    "Goal 9 : Building resilient infrastructure, promoting sustainable industrialization that benefits everyone, and encouraging innovation",
+    "Goal 10 : Reduce inequalities within and across countries",
+    "Goal 11 : Making cities and human settlements inclusive, safe, resilient and sustainable",
+    "Goal 12 : Establish sustainable consumption and production patterns",
+    "Goal 13 : Take urgent action to combat climate change and its impacts",
+    "Goal 14 : Conserve and sustainably use the oceans, seas and marine resources for sustainable development",
+    "Goal 15 : Preserve and restore terrestrial ecosystems, ensuring they are used sustainably, sustainably manage forests, combat desertification, halt and reverse the process of land degradation and put an end to the loss of biodiversity",
+    "Goal 16 : Promote the advent of peaceful and inclusive societies for the purposes of sustainable development, ensure access to justice for all and establish, at all levels, effective, accountable institutions open to all",
+    "Goal 17 : Strengthen the means to implement and revitalize the Global Partnership for Sustainable Development",
+  ],
 };
 
 function CreateComparaison() {
@@ -284,7 +303,32 @@ function updateComparaison(data) {
           ")"
       )
       .style("text-anchor", "middle")
-      .text("Goal " + cty.selectedGoals[i]);
+      .text("Goal " + cty.selectedGoals[i])
+      .on("mouseover", function (event) {
+        // Print the country name next to the mouse position
+        const mouseX = event.pageX + 10;
+        const mouseY = event.pageY - 10;
+
+        // Create a div for hover text and append it to the body
+        d3.select("body")
+          .append("div")
+          .attr("class", "hover-label-text")
+          .style("position", "absolute")
+          .style("left", mouseX + "px")
+          .style("top", mouseY + "px")
+          .style("padding", "5px")
+          .style("background-color", "lightgrey")
+          .style("border", "1px solid black") // Add border styling
+          .style("border-radius", "5px")
+          .style("font-size", "20px")
+          .style("fill", "black")
+          .text(cty.goalDescription[cty.selectedGoals[i] - 1]);
+      })
+      .on("mouseout", function () {
+        // Remove the country name display
+        d3.select("body").selectAll(".hover-label-text").remove();
+      });
+
     // Add dots for each country on the axis
     if (!d3.select("#selectAllCountries").property("checked")) {
       filteredData.forEach((countryData, countryIndex) => {
