@@ -17,6 +17,7 @@ function createViz() {
   InitialiseStats();
   CreateCorrelation();
 }
+let loopCheckboxChecked = false;
 
 function CreateHeader() {
   let svg = d3
@@ -67,6 +68,14 @@ function CreateHeader() {
       d3.select("#pictoSDG").style("opacity", 0);
     });
 
+  let labelGlider = d3
+    .select("#header")
+    .append("label")
+    .attr("id", "labelGliderAnnee")
+    .text("Year : 2000 ")
+    .style("display", "block") // Make it a block element
+    .style("text-align", "center"); // Center the label;
+
   let slider = d3
     .select("#header")
     .append("input")
@@ -75,16 +84,37 @@ function CreateHeader() {
     .attr("min", "2000")
     .attr("max", "2022")
     .attr("value", "2000")
+    .attr("step", "1") // Set the step increment to 1 year
+    .style("width", "50%") // Set the width of the slider
+    .style("margin", "auto") // Center the slider
+    .style("display", "block") // Make it a block element
     .on("input", function () {
       changeDate();
     });
 
-  let labelGlider = d3
-    .select("#header")
+  // Add a container div
+  let checkboxContainer = d3.select("#header").append("div");
+
+  // Add a checkbox
+  let checkbox = checkboxContainer
+    .append("input")
+    .attr("type", "checkbox")
+    .attr("id", "loop-checkbox")
+    .style("margin-left", "100px") // Center the checkbox
+    .on("change", function () {
+      // Update the checkbox status when it changes
+      loopCheckboxChecked = this.checked;
+      if (loopCheckboxChecked) {
+        loopSlider();
+      }
+    });
+
+  // Add a label to the right of the checkbox
+  checkboxContainer
     .append("label")
-    .attr("id", "labelGliderAnnee")
-    .attr("for", "year-picker-input")
-    .text("Choisissez une année : 2000 ");
+    .attr("for", "loop-checkbox")
+    .text("Loop Time")
+    .style("margin-left", "5px"); // Adjust the margin as needed
 
   svg
     .append("rect")
@@ -119,6 +149,31 @@ function CreateHeader() {
     .on("click", function (event, d) {
       window.location.href = "http://localhost:9999/multiligne.html";
     });
+
+  // Function to handle slider looping
+  function loopSlider() {
+    let currentValue = +slider.property("value");
+    let maxValue = +slider.attr("max");
+
+    if (currentValue === maxValue) {
+      // If at the maximum value, loop back to the minimum value
+      slider.property("value", +slider.attr("min"));
+      labelGlider.text("Year : " + slider.property("value"));
+    } else {
+      // Increment the slider value
+      slider.property("value", currentValue + 1);
+      labelGlider.text("Year : " + slider.property("value"));
+    }
+
+    // Call the changeDate function when the slider value changes
+    changeDate();
+    console.log(loopCheckboxChecked);
+    // Check if the checkbox is checked and loop again if needed
+    if (loopCheckboxChecked) {
+      console.log("again");
+      setTimeout(loopSlider, 300); // Adjust the delay as needed
+    }
+  }
 }
 
 function CreateMap() {
@@ -376,8 +431,6 @@ function changeDate() {
     ColorMap(ctx.data);
     updateComparaison(ctx.data);
   }
-  let label = d3
-    .select("#labelGliderAnnee")
-    .text(`Choisir une année : ${ctx.date}`);
+  let label = d3.select("#labelGliderAnnee").text(`Year : ${ctx.date}`);
   console.log(annee);
 }
