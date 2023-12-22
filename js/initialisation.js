@@ -3,6 +3,7 @@ const ctx = {
   height: 540,
   date: 2000,
   statCountry: "France",
+  countryCode: "FRA",
 };
 
 function createViz() {
@@ -192,8 +193,7 @@ function CreateMap() {
       .on("click", function (event, d) {
         console.log("Pays cliqué :", d.properties.name);
         ctx.statCountry = d.properties.name;
-        updateStats(ctx.data);
-
+        ctx.countryCode = d.properties.code;
         //UPDATE COMPARAISON
         if (
           cty.countries.includes(ctx.statCountry) &
@@ -202,6 +202,8 @@ function CreateMap() {
           cty.listePays.push(ctx.statCountry);
           updateComparaison(ctx.data);
         }
+
+        updateStats(ctx.data);
       })
       .on("mouseover", function (d) {
         d3.select(this).style("opacity", 0.5);
@@ -377,5 +379,5 @@ function changeDate() {
   let label = d3
     .select("#labelGliderAnnee")
     .text(`Choisir une année : ${ctx.date}`);
-  //   console.log(annee);
+  console.log(annee);
 }
