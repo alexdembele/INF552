@@ -1,8 +1,13 @@
-
+const ctc={
+    data:[]
+}
 
 function loadDataCorr()
 {
-
+    //que pour 2022 ?
+    //format [{pays:name,population:,goal:}]
+    d3.csv("data/sdg_index_2000-2022.csv").then(function (data) {
+        multiLigne(data)}).catch(function (err) { console.log(err); });
 }
 
 function CreateCorrelation()
@@ -34,9 +39,9 @@ function CreateCorrelation()
 
     let foreignObject = rec.append("foreignObject")
     .attr("x", 10)  // Position X
-    .attr("y", 40)  // Position Y
-    .attr("width", 150)  // Largeur
-    .attr("height", 30);  // Hauteur
+    .attr("y", 80)  // Position Y
+    .attr("width", 600)  // Largeur
+    .attr("height", 50);  // Hauteur
 
     // Ajouter l'élément select à l'intérieur de foreignObject
     let selecteur1 = foreignObject.append("xhtml:select")
@@ -44,8 +49,51 @@ function CreateCorrelation()
 
     let selecteur2 = foreignObject.append("xhtml:select")
         .attr("id", "monSelecteur2")
-        .attr("x",100)
+        
 
-    let options = []
+    let options = ["population","esperanceVie","RNB","surface","PIB","PIBHabitant","energieEqu",
+                    "education","emissionCO2","bonheur","chomage","goal1","goal2","goal3","goal4",
+                    "goal5","goal6","goal7","goal8","goal9","goal10","goal11","goal12","goal13",
+                    "goal14","goal15","goal16","goal17","global"]
+
+
+    selecteur1.selectAll("myOptions")
+    .data(options)
+    .enter()
+    .append("option")
+    .text(function (d) {return d;})
+    .attr("value", function (d) {return d;});
+
+    selecteur2.selectAll("myOptions")
+    .data(options)
+    .enter()
+    .append("option")
+    .text(function (d) {return d;})
+    .attr("value", function (d) {return d;});
+
+    rec.append("rect")
+    .attr("width", 111)
+    .attr("height", 20)
+    .attr("fill", "#F932D8")
+    .style("opacity", 0.6)
+    .attr("x",10)
+    .attr("y",60)
+    rec.append("rect")
+    .attr("width", 111)
+    .attr("height", 20)
+    .attr("fill", "#F932D8")
+    .style("opacity", 0.6)
+    .attr("x",120)
+    .attr("y",60)
+
+
+    let label1 = rec.append("text")
+    .attr("x",30)
+    .attr("y",75)
+    .text("Abscisse")
+    let label2 = rec.append("text")
+    .attr("x",140)
+    .attr("y",75)
+    .text("Ordonnee")
 
 }
