@@ -1,7 +1,11 @@
 const cty = {
-  paysGauche: "none",
-  paysDroite: "none",
+  listePays: [],
   selectedGoals: [],
+  colorScale: d3
+    .scaleOrdinal()
+    .domain(d3.range(20)) // Use a larger range for more colors
+    .range(d3.schemeCategory10),
+  countries: [],
 };
 
 function CreateComparaison() {
@@ -27,9 +31,9 @@ function CreateComparaison() {
     .style("font-size", "24px")
     .style("font-weight", "bold");
 
-  d3.csv("data/sustainable_development_report_2023.csv")
-    .then(function (data) {
-      CreateSelecteur(data);
+  d3.csv("data/sdg_index_2000-2022.csv")
+    .then(function (fixedData) {
+      CreateSelecteur(fixedData);
     })
     .catch(function (err) {
       console.log(err);
@@ -71,14 +75,16 @@ function CreateSelecteur(data) {
     "All goals",
   ];
 
-  let countries = data.map((d) => d.country);
+  let countriesSet = new Set(data.map((d) => d.country));
+  cty.countries = Array.from(countriesSet);
   // Sort the countries alphabetically
-  countries.sort();
-  countries.unshift("Sélectionnez un pays");
+
+  cty.countries.sort();
+  cty.countries.unshift("Sélectionnez un pays");
 
   selecteur1
     .selectAll("myOptions")
-    .data(countries)
+    .data(cty.countries)
     .enter()
     .append("option")
     .text(function (d) {
@@ -90,7 +96,7 @@ function CreateSelecteur(data) {
 
   selecteur2
     .selectAll("myOptions")
-    .data(countries)
+    .data(cty.countries)
     .enter()
     .append("option")
     .text(function (d) {
@@ -99,6 +105,32 @@ function CreateSelecteur(data) {
     .attr("value", function (d) {
       return d;
     });
+
+  // Ajouter une seule checkbox pour "Tous les pays"
+  compare
+    .insert("input", "#countrySelector1")
+    .attr("type", "checkbox")
+    .attr("id", "selectAllCountries")
+    .attr("class", "selectAllCheckbox")
+    .on("change", function () {
+      // Vérifier si la case "Tous les pays" est cochée
+      const isChecked = d3.select(this).property("checked");
+
+      // Mettre à jour la liste des pays en fonction de l'état de la case
+      if (isChecked) {
+        cty.listePays = cty.countries.slice(1); // Exclure "Sélectionnez un pays"
+      } else {
+        cty.listePays = [];
+      }
+
+      // Appeler la fonction de mise à jour de la comparaison
+      updateComparaison(data);
+    });
+
+  compare
+    .insert("label", "#countrySelector1")
+    .attr("for", "selectAllCountries")
+    .text("Tous les pays");
 
   let goalContainer = selecteur3.append("div");
   goalContainer.append("div").text("Sélectionnez des Objectifs");
@@ -125,9 +157,11 @@ function CreateSelecteur(data) {
         cty.selectedGoals = isChecked ? goals.slice(0, -1) : [];
         updateComparaison(data);
       } else {
-        let checkedGoals = goals.filter((goal) =>
-          d3.select("#checkbox_" + goal).property("checked")
-        );
+        let checkedGoals = goals.filter((goal) => {
+          let checkbox = d3.select("#checkbox_" + goal);
+          return checkbox.size() > 0 && checkbox.property("checked");
+        });
+        // console.log(checkedGoals);
         cty.selectedGoals = checkedGoals;
         updateComparaison(data);
       }
@@ -144,7 +178,7 @@ function CreateSelecteur(data) {
 
   selecteur1.on("change", function () {
     if (d3.select(this).property("value") !== "Sélectionnez un pays") {
-      cty.paysGauche = d3.select(this).property("value");
+      cty.listePays[0] = d3.select(this).property("value");
       updateComparaison(data);
       d3.select(this)
         .selectAll("option[value='Sélectionnez un pays']")
@@ -154,7 +188,7 @@ function CreateSelecteur(data) {
 
   selecteur2.on("change", function () {
     if (d3.select(this).property("value") !== "Sélectionnez un pays") {
-      cty.paysDroite = d3.select(this).property("value");
+      cty.listePays[1] = d3.select(this).property("value");
       updateComparaison(data);
       d3.select(this)
         .selectAll("option[value='Sélectionnez un pays']")
@@ -168,24 +202,28 @@ function CreateSelecteur(data) {
 }
 
 function updateComparaison(data) {
-  console.log(cty.paysGauche, cty.paysDroite, cty.selectedGoals);
   // Filter the data based on the selected countries
-  let filteredData = data.filter(
-    (d) => d.country === cty.paysGauche || d.country === cty.paysDroite
+  let filteredData = Array.from({ length: cty.listePays.length }, (_, i) =>
+    data.find((d) => d.country === cty.listePays[i] && d.year == ctx.date)
   );
-
+  //   console.log(filteredData);
   // Filter the data based on the selected goals
   if (cty.selectedGoals.length > 0) {
     filteredData = filteredData.map((d) => {
       let newD = { country: d.country };
       cty.selectedGoals.forEach((goal) => {
-        newD[`goal_${goal}_score`] = d[`goal_${goal}_score`];
+        if (goal == "global") {
+          newD[`goal_${goal}_score`] =
+            d[ctx.date == 2023 ? `overall_score` : "sdg_index_score"];
+        } else {
+          newD[`goal_${goal}_score`] = d[`goal_${goal}_score`];
+        }
       });
       return newD;
     });
   }
-  console.log(filteredData);
 
+  //   console.log(filteredData);
   // Set up parallel plot dimensions
   const dimensions = cty.selectedGoals.map((goal) => `goal_${goal}_score`);
 
@@ -240,37 +278,58 @@ function updateComparaison(data) {
       .style("text-anchor", "middle")
       .text("Goal " + cty.selectedGoals[i]);
     // Add dots for each country on the axis
-    filteredData.forEach((countryData, countryIndex) => {
-      const x = i * ((width - 100) / dimensions.length) + 100;
-      const y = scales[dim](countryData[dim]);
+    if (!d3.select("#selectAllCountries").property("checked")) {
+      filteredData.forEach((countryData, countryIndex) => {
+        const x = i * ((width - 100) / dimensions.length) + 100;
+        const y = scales[dim](countryData[dim]);
 
-      parallelPlot
-        .append("circle")
-        .attr("cx", x)
-        .attr("cy", y)
-        .attr("r", 5) // Adjust the radius as needed
-        .style("fill", countryData.country === cty.paysGauche ? "blue" : "red");
-    });
+        parallelPlot
+          .append("circle")
+          .attr("cx", x)
+          .attr("cy", y)
+          .attr("r", 5) // Adjust the radius as needed
+          .style("fill", cty.colorScale(countryIndex));
+      });
+    }
   });
+  // Calculer les y-coordinates en fonction de la hauteur de la fenêtre
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, filteredData.length - 1]) // Domaine de l'indice des pays dans filteredData
+    .range([50, height - 100]); // Plage de hauteurs
+
   // Set y-coordinates for country names
-  const yCoordinates = filteredData.map((d, i) =>
-    d.country === cty.paysGauche ? 150 : height - 150
-  );
+  const yCoordinates = filteredData.map((d, i) => yScale(i));
 
   // Add country names on the left side
-  parallelPlot
-    .selectAll(".country-label")
-    .data(filteredData)
-    .enter()
-    .append("text")
-    .attr("class", "country-label")
-    .text((d) => d.country)
-    .attr("x", 50)
-    .attr("y", (d, i) => yCoordinates[i])
-    .attr("dy", (d, i) => (i === 0 ? -3 : 3)) // Adjust the vertical position
-    .style("text-anchor", "end")
-    .style("font-size", "15px")
-    .style("fill", (d, i) => (d.country === cty.paysGauche ? "blue" : "red"));
+  if (!d3.select("#selectAllCountries").property("checked")) {
+    parallelPlot
+      .selectAll(".country-label")
+      .data(filteredData)
+      .enter()
+      .append("text")
+      .attr("class", "country-label")
+      .text((d) => d.country)
+      .attr("x", 50)
+      .attr("y", (d, i) => yCoordinates[i])
+      .attr("dy", (d, i) => (i === 0 ? -3 : 3)) // Adjust the vertical position
+      .style("text-anchor", "end")
+      .style("font-size", "15px")
+      .style("fill", (d, i) =>
+        !d3.select("#selectAllCountries").property("checked")
+          ? cty.colorScale(i)
+          : "grey"
+      );
+  } else {
+    parallelPlot
+      .append("text")
+      .text("Tous les pays")
+      .attr("x", 50)
+      .attr("y", height / 2) // Adjust the vertical position
+      .style("text-anchor", "end")
+      .style("font-size", "15px")
+      .style("fill", "black"); // Adjust the text color as needed
+  }
 
   // Add links between consecutive points on vertical axis
   const linkGroup = parallelPlot.append("g").attr("class", "link-group");
@@ -290,7 +349,9 @@ function updateComparaison(data) {
         .attr("y2", y2)
         .style(
           "stroke",
-          countryData.country === cty.paysGauche ? "blue" : "red"
+          !d3.select("#selectAllCountries").property("checked")
+            ? cty.colorScale(countryIndex)
+            : "grey"
         )
         .style("stroke-width", 1)
         .style("opacity", 0.7);
