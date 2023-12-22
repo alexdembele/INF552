@@ -25,8 +25,15 @@ function CreateComparaison() {
     .attr("fill", "light blue")
     .style("opacity", 0.1);
 
+    rec.append("rect")
+    .attr("width", 1600)
+    .attr("height", 30)
+    .attr("fill", "#98A3FC")
+    .style("opacity", 0.6);
+
   rec
     .append("text")
+    .attr("x",5)
     .attr("y", 20)
     .text("Comparaison")
     .style("font-size", "24px")
@@ -359,3 +366,5 @@ function updateComparaison(data) {
     }
   });
 }
+
+

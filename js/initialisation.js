@@ -13,6 +13,7 @@ function createViz() {
   CreateStats();
   LoadData();
   CreateComparaison();
+  CreateCorrelation();
 }
 
 function CreateHeader() {
