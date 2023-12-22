@@ -60,6 +60,12 @@ function initHeader()
     .attr("y",30)
     .attr("stroke","green")
 
+    svg.append("rect")
+    .attr("height",50)
+    .attr("width",350)
+    .attr("y",100)
+    .attr("fill","#F87FE0")
+
     svg.append("text")
     .attr("id","surligne")
     .text("Pays surligné : France")  
