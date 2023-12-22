@@ -10,7 +10,7 @@ function initialiseRadarChart() {
       ctx.happinessData = data;
       //   console.log("test");KC
       happinessData_loc = getRadarChartData(ctx.statCountry, data);
-      console.log(happinessData_loc);
+      // console.log(happinessData_loc);
       drawRadarChart(happinessData_loc);
     })
     .catch(function (err) {
@@ -185,17 +185,14 @@ function drawRadarChart(data) {
 }
 
 function updateRadarChart() {
-  console.log("test1");
   data = getRadarChartData(ctx.statCountry, ctx.happinessData);
 
-  console.log("test2");
   // Select all existing circles representing data points
   const svg = d3.select("#stats svg");
   const circles = svg.selectAll(".point");
   const lines = svg.selectAll(".line");
   // Select the SVG element where the radar chart is drawn
   if (data == null) {
-    console.log("whaaaat");
     circles.each(function (d, i) {
       // Update coordinates of the circle based on new data
       d3.select(this).attr("cx", 0).attr("cy", 0);
@@ -284,11 +281,6 @@ function drawVerticalBar(countryName, year, rawData, left, top, name) {
   const height = 100; // Specify the height of the SVG container
   const barHeight = proportionalValue * height; // Calculate the height of the bar based on the proportional value
 
-  console.log("maxValue");
-  console.log(maxOverall);
-  console.log("selectedYearValue");
-  console.log(selectedYearValue);
-
   // Create SVG container
   let svg = d3
     .select("#stats svg")
@@ -336,22 +328,20 @@ function updatePIB() {
   data = cts.PIB;
 
   const selectedCountryData = data.find(
-    (entry) => entry["Country Code"] == ctx.countryCode[ctx.statCountry]
+    (entry) => entry["Country Code"] == ctx.countryCode
   );
-  console.log("selectedCountryData");
-  console.log(selectedCountryData);
 
   let selectedYearValue = selectedCountryData[ctx.date];
+
   let proportionalValue = selectedYearValue / max;
   let barHeight = proportionalValue * height;
-
   bar.attr("y", height - barHeight).attr("height", barHeight);
 }
 
 function PIBBarchart(countryName, rawData, left, top, name) {
   // Filter data for the selected country name
   const selectedCountryData = rawData.find(
-    (entry) => entry["Country Code"] == ctx.countryCode[ctx.statCountry]
+    (entry) => entry["Country Code"] == ctx.countryCode
   );
 
   if (!selectedCountryData) {
