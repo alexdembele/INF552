@@ -138,7 +138,7 @@ function multiLigne(data)
            
                cty.yScale = d3.scaleLinear()
                .domain([0, 100])
-               .range([1000,20]);
+               .range([950,20]);
 
                //axe abscisse
                let axeX = d3.axisBottom(cty.xScale)

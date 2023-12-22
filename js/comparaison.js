@@ -11,12 +11,12 @@ function CreateComparaison()
 
     
     let rec = d3.select("#compare").append("svg").attr("width", 1600)
-    .attr("height", 540)
+    .attr("height", 500)
     .attr("transform","translate(0,-540)")
 
     rec.append("rect")
     .attr('width', 1600)
-    .attr('height', 540)
+    .attr('height', 500)
     .attr('fill', 'light blue')
     .style('opacity',0.1)
 
@@ -34,7 +34,7 @@ function CreateComparaison()
 }
 function CreateSelecteur(data)
 {
-    let compare=d3.select("#compare").append("g").attr("transform","translate(0,1000")
+    let compare=d3.select("#stats").append("g").attr("transform","translate(0,1000")
     let selecteur1 = compare.append('select').attr("y",0).attr("id","countrySelector1")
     let selecteur2 = compare.append("select").attr("y",0).attr("id","countrySelector2")
 
