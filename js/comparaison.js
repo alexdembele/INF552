@@ -24,7 +24,8 @@ function CreateComparaison() {
     .attr("fill", "light blue")
     .style("opacity", 0.1);
 
-    rec.append("rect")
+  rec
+    .append("rect")
     .attr("width", 1600)
     .attr("height", 30)
     .attr("fill", "#98A3FC")
@@ -32,7 +33,7 @@ function CreateComparaison() {
 
   rec
     .append("text")
-    .attr("x",5)
+    .attr("x", 5)
     .attr("y", 20)
     .text("Comparaison")
     .style("font-size", "24px")
@@ -238,7 +239,7 @@ function updateComparaison(data) {
   d3.select("#parallel-plot").remove();
 
   // Create parallel plot SVG
-  const margin = { top: 20, right: 20, bottom: 20, left: 100 };
+  const margin = { top: 40, right: 20, bottom: 30, left: 100 };
   const width = 1600 - margin.left - margin.right;
   const height = 540 - margin.top - margin.bottom;
 
@@ -279,7 +280,7 @@ function updateComparaison(data) {
         "translate(" +
           (i * ((width - 100) / dimensions.length) + 100) +
           "," +
-          (height + margin.bottom) +
+          (height + margin.bottom / 1.5) +
           ")"
       )
       .style("text-anchor", "middle")
@@ -406,5 +407,3 @@ function updateComparaison(data) {
     }
   });
 }
-
-
