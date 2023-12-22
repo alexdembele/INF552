@@ -512,6 +512,11 @@ function CreateStats(data) {
     .style("font-weight", "bold")
     .style("fill", "blue");
 
+  
+
+ 
+
+
     //population
     rec
     .append("rect")
@@ -680,6 +685,7 @@ function updateStats(data) {
   d3.select("#Edutext").text("Education : " + (ctc.data.education[ctx.countryCode][ctx.date]).toString())
   d3.select("#CO2text").text("Emission CO2 : " + (ctc.data.emission[ctx.countryCode][ctx.date]).toString())
   d3.select("#chomagetext").text("Chomage(%) : " + (ctc.data.chomage[ctx.countryCode][ctx.date]).toString())
+  
   updateRadarChart();
   // updatePIB();
   // updatePIBchart();
