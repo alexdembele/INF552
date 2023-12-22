@@ -12,6 +12,7 @@ function loadDataEducation()
         let arr= {}
         console.log(data[1])
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -30,6 +31,7 @@ function loadDataChomage()
     d3.csv("data/chomage.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -47,6 +49,7 @@ function loadDataPopulation()
     d3.csv("data/population.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -64,6 +67,7 @@ function loadDataVie()
     d3.csv("data/esperanceVie.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -81,6 +85,7 @@ function loadDataRNB()
     d3.csv("data/RNB.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -97,6 +102,7 @@ function loadDataSurface()
     d3.csv("data/surface.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -113,6 +119,7 @@ function loadDataPIB()
     d3.csv("data/PIB.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -130,6 +137,7 @@ function loadDataPIBHabitant()
     d3.csv("data/PIBHabitant.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -146,6 +154,7 @@ function loadDataEnergie()
     d3.csv("data/energieEqu.csv").then(function (data) {
         let arr= {}
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -163,6 +172,7 @@ function loadDataCO2()
         let arr= {}
 
         data.forEach(element => {
+            arr[element["Country Name"]]={}
             arr[element["Country Name"]]["name"]=element["Country Name"]
             for(o=2000;o<=2022;o++)
             {
@@ -219,7 +229,6 @@ function loadDataGoal()
 function CreateCorrelation()
 {
     console.log("Yousk2")
-    loadDataEducation()
     let rec=d3.select("#correlateur").append("svg")
     .attr("width", 1600)
     .attr("height", 540)
